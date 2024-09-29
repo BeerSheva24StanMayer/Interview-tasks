@@ -1,7 +1,10 @@
 package telran.interview;
 
+import java.util.*;
+import java.util.stream.IntStream;
+
 public class InterviewTasks {
-    /**
+/**
      * 
      * @param array
      * @param sum
@@ -9,7 +12,7 @@ public class InterviewTasks {
      *  summing of which gives the value equaled to a given "sum" value
      */
     static public boolean hasSumTwo(int [] array, int sum) {
-        //TODO
-        return false;
+        Set<Integer> checkingSet = new HashSet<>();
+        return IntStream.of(array).anyMatch(i -> checkingSet.contains(sum - i) || !checkingSet.add(i));
     }
 }
