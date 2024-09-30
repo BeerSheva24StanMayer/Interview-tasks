@@ -13,6 +13,18 @@ public class InterviewTasks {
      */
     static public boolean hasSumTwo(int [] array, int sum) {
         Set<Integer> checkingSet = new HashSet<>();
-        return IntStream.of(array).anyMatch(i -> checkingSet.contains(sum - i) || !checkingSet.add(i));
+        int i = 0;
+        boolean res = false;
+        while (!res && i < array.length) {
+            int numberSecond = sum - array[i];
+            
+            if (checkingSet.contains(numberSecond)) {
+                res = true;
+            }
+            checkingSet.add(array[i]);
+            i++;
+        }
+
+        return res;
     }
 }
