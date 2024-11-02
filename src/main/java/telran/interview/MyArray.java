@@ -1,22 +1,21 @@
 package telran.interview;
 
+import java.util.*;
+
 public class MyArray<T> {
-    private T defValue;
-    private boolean isSetDefault;
-    private T[] array;
+    private T defValue = null;
+    HashMap<Integer, T> array;
     private int size;
 
-    @SuppressWarnings("unchecked")
     public MyArray(int size) {
         this.size = size;
-        this.isSetDefault = false;
-        this.array = (T[])new Object[size];
+        array = new HashMap<>();
 
     }
 
 	public void setAll(T value) {
         this.defValue = value;
-        this.isSetDefault = true;
+        array = new HashMap<>();
 		
 	}
     
@@ -24,20 +23,14 @@ public class MyArray<T> {
         if(index < 0 || index >= size) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        if(isSetDefault && !defValue.equals(value)) {
-            array[index] = value;
-            isSetDefault = false;
-        }
-        else if(!isSetDefault) {
-            array[index] = value;
-        }
+        array.put(index, value);
 	}
 	
 	public T get(int index) {
         if(index < 0 || index >= size) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        return isSetDefault ? defValue : array[index];
+        return array.getOrDefault(index, defValue);
 	}
 
 }

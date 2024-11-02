@@ -47,43 +47,35 @@ public class InterviewTasks {
 
     public static List<DateRole> assignRoleDates(List<DateRole> rolesHistory,
             List<LocalDate> dates) {
-        // TODO
-        // rolesHistory is the list containg dates and roles assigned to the employees
-        // at the appropriate dates
-        // for example, date => 2019-01-01, role => Developer means that some employee
-        // (no matter who) was taken
-        // role Developer at 2019-01-01
-        // create List<DateRole> with roles matching with the given dates
-        // most effective data structure
-        TreeMap<LocalDate, String> log = new TreeMap<>();
-        rolesHistory.forEach(i -> log.put(i.date(), i.role()));
+
+        TreeMap<LocalDate, String> map = new TreeMap<>();
+        rolesHistory.forEach(i -> map.put(i.date(), i.role()));
+
         List<DateRole> closestDates = dates.stream().map(date -> {
-            LocalDate value = log.floorKey(date);
-            String role = value != null ? log.get(value) : null;
+            LocalDate value = map.floorKey(date);
+            String role = value != null ? map.get(value) : null;
             return new DateRole(date, role);
         }).toList();
-        
+
         return closestDates;
     }
 
     public static boolean isAnagram(String word, String anagram) {
-        HashMap<Character, Integer> letterMap = new HashMap<>();
-        Boolean isAnagram = false;
-        char[] chars = anagram.toCharArray();
-        int i = 0;
-        if (word.length() == anagram.length() && !word.equals(anagram)) {
-            for (char ch : word.toCharArray()) {
-                letterMap.put(ch, letterMap.getOrDefault(ch, 0) + 1);
-            }
-            while (i < chars.length && letterMap.containsKey(chars[i])) {
-                letterMap.put(chars[i], letterMap.get(chars[i]) - 1);
-                if (letterMap.get(chars[i]) == 0) {
-                    letterMap.remove(chars[i]);
-                }
-                i++;
-            }
-            isAnagram = letterMap.isEmpty();
+        boolean result = false;
+        if(word.length() == anagram.length() && !word.equals(anagram)) {
+            HashMap<Integer, Integer> words = mapOfWord(word);
+            result = isEqual(anagram, words);
         }
-        return isAnagram;
+        return result;
+    }
+
+    private static boolean isEqual(String anagram, HashMap<Integer, Integer> words) {
+        return anagram.chars().allMatch(echar -> words.compute(echar, (k, v) -> v == null ? -1 : v - 1) > -1);
+    }
+
+    private static HashMap<Integer, Integer> mapOfWord(String word) {
+        HashMap <Integer, Integer> charsMap = new HashMap<>();
+        word.chars().forEach(echar -> charsMap.merge(echar, 1, Integer::sum));
+        return charsMap;
     }
 }
